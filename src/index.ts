@@ -1,4 +1,8 @@
 import express, {Application, Request, Response } from 'express';
+import morgan from 'morgan';
+import compression from 'compression';
+import helmet from 'helmet';
+import cors from 'cors';
 
 class App {
     public app: Application;
@@ -10,7 +14,11 @@ class App {
     }
 
     protected plugins(): void {
-        this.app.use(express.json())
+        this.app.use(express.json());
+        this.app.use(morgan('dev'));
+        this.app.use(compression());
+        this.app.use(helmet());
+        this.app.use(cors());
     }
 
     protected routes(): void {
@@ -18,7 +26,7 @@ class App {
 
         this.app.route("/").post((req: Request, res: Response) => res.json(req.body));
 
-        
+
     }
 }
 
