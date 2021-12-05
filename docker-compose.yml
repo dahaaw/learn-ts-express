@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:  
+  db:
+    container_name: db    
+    image: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - my-network    
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+    - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+    
+  phpmyadmin:    
+    image: phpmyadmin
+    container_name: pma    
+    networks:
+      - my-network        
+    ports:
+      - "8080:80"    
+    environment:
+      PMA_HOST: db    
+    depends_on:
+      - db
+
+networks:
+  my-network:

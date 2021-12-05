@@ -3,11 +3,16 @@ import morgan from 'morgan';
 import compression from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
+import { config as dotenv } from 'dotenv';
+
+// ROUTERS
+import Routes from './routes';
 
 class App {
     public app: Application;
 
     constructor() {
+        dotenv();
         this.app = express();
         this.plugins();
         this.routes();
@@ -22,14 +27,10 @@ class App {
     }
 
     protected routes(): void {
-        this.app.route("/").get((req: Request, res: Response) => res.json({message:'ini ts'}));
-
-        this.app.route("/").post((req: Request, res: Response) => res.json(req.body));
-
-
+        new Routes(this.app)
     }
 }
 
-const port: Number = 80;
 const app = new App().app;
-app.listen(port, ()=> console.log(`app run in port ${port}`));
+const port: Number = Number(process.env.PORT);
+app.listen(port, () => console.log(`app run in port ${port}`));
